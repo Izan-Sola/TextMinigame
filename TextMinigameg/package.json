@@ -1,7 +1,7 @@
 {
     "name": "minigame-project",
     "version": "1.0.0",
-    "description": "A web-based minigame with a database-backed scoreboard.",
+    "description": "A text minigame.",
     "main": "server.js",
     "scripts": {
         "start": "node server.js"
