@@ -1,0 +1,63 @@
+<html>
+
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.js"></script>
+<script>window.$ = window.jQuery = require(['./jquery-3.7.1.js']);
+</script>
+
+<script src="jquery-3.7.1.js"> </script>
+    <script src="js.js">
+    </script>
+</head>
+
+<body>
+<h1 class="title">Text minigame</h1>
+
+
+    <div id="score" class="score">
+        <p id="scoreCounter" class="scoreCounter"> <b>Current Score: 0</b></p>
+    </div>
+    <div class="info"> 
+        <ul>
+            <li> +  ==  that's you!</li>
+            <li> @  ==  a bomb</li>
+            <li> *  ==  a coin</li>
+            <li> O  ==  path</li>
+        </ul>
+    </div>
+    <div class="description">
+            <p>Each time you collect a coin your score will raise and
+                the grid will get shorter. Avoid the bombs and
+                collect all the coins you can!
+                You can move using the arrows.
+            </p>
+    </div>
+
+    <div id="container" class="container"> </div>
+
+    <div class="mainButtons">
+        <input type="button" id="start" value="Start">
+    </div>
+    <div class="extra">
+        <input type="button" id="scoreListButton" value="View and update your scores">
+    </div>
+    <div class="bestPlayer"></div>
+
+    <div class="namePrompt" style="visibility: hidden; position: absolute">
+        <h3 class="entername">Enter your name:</h3>
+        <input type="text" id="name" class="promptInputT" >
+        <input type="button" id="enterName"  class="promptInputB" value="Accept">
+    </div>
+
+    <div class="scoresContainer">
+
+        <ul>
+     
+        </ul>
+    </div>
+</body>
+
+</html>
+
