@@ -116,6 +116,6 @@ app.post('/databaseupdates', async (req, res) => {
   res.json(result);
 });
 
-app.listen(port, '192.168.18.48', () => {
+app.listen(port, 'IP HERE', () => {
   console.log(`Server is running on http://yourIP:${port}`);
 });
