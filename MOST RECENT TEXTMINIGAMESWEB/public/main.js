@@ -114,10 +114,7 @@ function sendDatabaseUpdate(score, coins, action, name) {
           if(rows.pname == data.playerName) {
                       
           $('.container').html('<h3 class="highestScore">Highest: '+rows.score+'</h3>')
-          $('.container').append('<p class="scores">0--10 = Newbie</p>')
-          $('.container').append('<p class="scores">11--21 = Advanced</p>')
-          $('.container').append('<p class="scores">22--29 = Expert</p>')
-          $('.container').append('<p class="scores">30+ = GODLIKE</p>')
+           $('.container').append('<p class="scores">0--10 = Newbie</p><p class="scores">11--21 = Advanced</p><p class="scores">22--29 = Expert</p><p class="scores">30+ = GODLIKE</p>' )
             if(score > rows.score) {
             sendDatabaseUpdate(score, coins, "newMaxScore", rows.pname);
             }
@@ -157,10 +154,7 @@ function sendDatabaseUpdate(score, coins, action, name) {
         if(rows.pname == data.playerName) {
                     
         $('.container2').html('<h3 class="highestScore">Highest: '+rows.score2+'</h3>')
-        $('.container2').append('<p class="scores">+150 = Starter</p>')
-        $('.container2').append('<p class="scores">+350 = Elusive</p>')
-        $('.container2').append('<p class="scores">+525 = Evasive</p>')
-        $('.container2').append('<p class="scores">+650 = UNTOUCHABLE</p>')
+        $('.container2').append('<p class="scores">+150 = Starter</p><p class="scores">+350 = Elusive</p><p class="scores">+525 = Evasive</p><p class="scores">+650 = UNTOUCHABLE</p>')
           if(score > rows.score2) {
           sendDatabaseUpdate(totalPoints, coins, "newMaxScore2", rows.pname);
           }
