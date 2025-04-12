@@ -64,7 +64,6 @@ $(document).ready(function () {
   }})
 });
 
-//TODO: Add a simple chat
 
 function sendDatabaseUpdate(score, coins, action, name) {
     fetch('https://monthly-devoted-pug.ngrok-free.app/databaseupdates', {
