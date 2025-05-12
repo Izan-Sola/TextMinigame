@@ -1,0 +1,38 @@
+#container3 {
+    position: relative;
+    border: #000000 2px solid;
+    width: 200px;
+    height: 410px;
+    margin-left: 300px;
+    margin-top: 150px;
+    font-size: 30px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.info {
+    position: absolute;
+    border: black 3px dotted;
+    width: 250px;
+    height: 200px;
+    margin-left: 520px;
+    font-size:20px;
+}
+
+.description {         
+    text-align: right;
+    position: absolute;
+    width: 180px;
+    margin-left: 110px;
+    margin-top: -15px;
+    font-size: 20px;
+}
+
+.timer-points {
+    margin-top: -75px;
+    margin-left: 245px;
+    position: absolute;
+    font-size: 20px;
+    text-align: center;
+}
+
