@@ -2,9 +2,9 @@
 $(document).ready(function () {
   //First row are ranks for minigame 1, second row for minigame 2
   ranks = ['(Newbie)', '(Advanced)', '(Expert)', '(GODLIKE)',
-           '[unranked]', '[Starter]', '[Evasive]', '[Elusive]', '[UNTOUCHABLE]'
+           '[unranked]', '[Starter]', '[Evasive]', '[Elusive]', '[UNTOUCHABLE]',
+           '{Short Legged}', '{Average}', '{Sprinter}', '{Speed Runner}'
   ]
-
 
     $('input').on('mousedown', function(b) {
         b.stopPropagation();
