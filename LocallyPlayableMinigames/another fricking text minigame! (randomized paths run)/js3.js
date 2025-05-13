@@ -1,8 +1,9 @@
-function fillGrid () {
+
+function fillGrid3() {
     // posible rank names: {Short Legged}, {Average}, {Sprinter}, {Speed Runner}
     container = $( '#container3' )
     container.html( '' )
-    grid = container.text().split( '' )
+    grid3 = container.text().split( '' )
     start = Random.integer( 0, 8 )
     playerStart = start
     playerEnd = 0
@@ -14,48 +15,35 @@ function fillGrid () {
         end = Random.integer( 0, 8 )
 
         for ( y = 0; y < 9; y++ ) {
-            if ( y != start ) {
-                if ( coinPosition != null && coinPosition == y ) {
-                    grid.push( 'Φ' )
-                    coinPosition = null
-                }
-                else grid.push( 'X' )
 
-            } else if ( Random.integer( barrierChance, 8 ) == barrierChance ) grid.push( '═' )
-              else grid.push( 'O' )
-
+            if ( y != start ) ( coinPosition != null && coinPosition == y ) ? (grid3.push( 'Φ' ), coinPosition = null) : grid3.push( 'X' )
+            else if ( Random.integer( barrierChance, 8 ) == barrierChance ) grid3.push( '═' )
+            else grid3.push( 'O' )
         }
 
         for ( i = 0; i < 9; i++ ) {
             // draws path between the points
             if ( ( i >= start && i <= end ) || ( i <= start && i >= end ) ) {
-                grid.push( 'O' )
+                grid3.push( 'O' )
                 // removes coin if it is between 2 paths to avoid making a bridge
-                l = grid.length
-                if ( grid[ l - 10 ] == 'Φ' && grid[ l - 19 ] == 'O' ) grid[ l - 10 ] = 'X'
-
-                if ( j == 5 ) playerEnd = grid.length - 1
-        
-            } else grid.push( 'X' )
-            
-
+                l = grid3.length
+                if ( grid3[ l - 10 ] == 'Φ' && grid3[ l - 19 ] == 'O' ) grid3[ l - 10 ] = 'X'
+                if ( j == 5 ) playerEnd = grid3.length - 1
+     
+            } else grid3.push( 'X' )          
             // determines the position of the coin
-            if ( i > start && i < end ) {
-                if ( Random.integer( coinChance, 4 ) == coinChance ) coinPosition = i
-                else coinPosition == null    
-            }
+            if ( i > start && i < end ) Random.integer( coinChance, 4 ) == coinChance ? coinPosition = i : coinPosition = null   
         }
-
         start = end
     }
 
-    grid[ playerStart ] = '+'
-    container.html( grid )
-    console.log( playerEnd, grid[ playerEnd ] )
+    grid3[ playerStart ] = '+'
+    container.html( grid3 )
+    console.log( playerEnd, grid3[ playerEnd ] )
 }
 
 function start () {
-    fillGrid()
+    fillgrid3()
     timerInterval = setInterval( timer, 1000 )
     incomingDeathInterval = setInterval( incomingDeath, incomingDeathDelay )
 }
@@ -64,13 +52,15 @@ function end() {
     clearInterval( timerInterval )
     clearInterval( incomingDeathInterval )
     alert("Time 0")
+
+    //sendDatabaseUpdate(totalPoints, coins, "newMaxScore3", "")
 }
 
 function incomingDeath() {
     
-    for( i = 9 * row; i < 9 * row + 9; i++ ) grid[ i ] = 'V'
+    for( i = 9 * row; i < 9 * row + 9; i++ ) grid3[ i ] = 'V'
     console.log(incomingDeathDelay)
-    container.html( grid )
+    container.html( grid3 )
     row += 1
 }
 
@@ -100,7 +90,7 @@ $( document ).on( 'keydown', function ( k ) {
     pastPosition = position
 
     if ( coinPos != null ) {
-        grid[ coinPos ] = 'O'
+        grid3[ coinPos ] = 'O'
     }
 
     switch ( k.key ) {
@@ -117,19 +107,15 @@ $( document ).on( 'keydown', function ( k ) {
             position += 1
             break
         case ' ':
-            if ( grid[ position + 9 ] == '═' ) {
-                position += 18
-            }
+            if ( grid3[ position + 9 ] == '═' ) position += 18
+            
             break
     }
 
-    if ( k.key != ' ' && grid[ position ] == '═' ) {
-        position = pastPosition
-        console.log( 'hey' )
-    }
+    if ( k.key != ' ' && grid3[ position ] == '═' ) position = pastPosition
 
     if ( position == playerEnd ) {
-        fillGrid()
+        fillgrid3()
         points += t + currentTime
         clearInterval(incomingDeathInterval)
 
@@ -138,9 +124,10 @@ $( document ).on( 'keydown', function ( k ) {
         }, 2000 )
 
         row = 0
-    } else if ( !( position > grid.length ) && !( position < grid.length - grid.length - 1 ) ) {
+    } 
+    else if ( !( position > grid3.length ) && !( position < grid3.length - grid3.length - 1 ) ) {
 
-        switch ( grid[ position ] ) {
+        switch ( grid3[ position ] ) {
 
             case 'X':
                 container.html( 'You stepped out of the path!' )
@@ -148,19 +135,19 @@ $( document ).on( 'keydown', function ( k ) {
                 break
 
             case 'O':
-                grid[ currentPosition ] = 'O'
-                grid[ position ] = '+'
-                container.html( grid )
+                grid3[ currentPosition ] = 'O'
+                grid3[ position ] = '+'
+                container.html( grid3 )
                 break
 
             case 'Φ':
-                coinPos = grid.indexOf( 'Φ' )
-                grid[ currentPosition ] = 'O'
-                grid[ position ] = '+'
-                container.html( grid )
+                coinPos = grid3.indexOf( 'Φ' )
+                grid3[ currentPosition ] = 'O'
+                grid3[ position ] = '+'
+                container.html( grid3 )
                 points += 20 + ( 20 * ( currentTime / 100 ) )
+                break
         }
-
         currentPosition = position
     }
 } )
@@ -184,5 +171,5 @@ $( document ).ready( function () {
         '<br> Barrier frequency: ' + barrierChance +
         ' Paths completed: ' + 0
     )
-    // fillGrid()
+    // fillGrid3()
 } )
