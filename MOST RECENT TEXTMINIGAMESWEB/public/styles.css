@@ -9,9 +9,6 @@
     overflow: hidden;
     overflow-wrap: anywhere;
 }
-body {
-    margin-top: -10px;
-}
 
 .score {
         position: absolute;
@@ -115,7 +112,7 @@ li{
     height: 70px;
     border: dashed black 2px;
     position: relative;
-    top: 70px;
+    top: 75px;
     left: 200px;
     text-align: center;
     font-size: 22px;
@@ -149,7 +146,7 @@ li{
 }
 .timer-points {
     position: absolute;
-    margin-left: 205px;
+    margin-left: 270px;
     margin-top: -290px;
     width: 400px;
     height: 90px;

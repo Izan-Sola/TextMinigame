@@ -1,6 +1,5 @@
 
 
-
 function start() {
     hit = false
     newPos = 0
@@ -13,7 +12,7 @@ function start() {
     existingCoins = 0
     totalPoints = 0
     basePoints = 0
-    $('.timer-points').html('Time: ' + t + '(s)' + ' Points: ' + Math.round(t * 3.45) + ' Coins: ' + coins + '<br> Laser interval: ' + atkSpeed + ' Laser amount: ' + (laserAmount+1));
+    $('.timer-points').html('Time: ' + t + '(s)' + ' Points: ' + Math.round(t * 3.45) + ' Coins: ' + coins + '<br> Laser interval: ' + atkSpeed + ' Laser amount: ' + laserAmount);
     fillGrid2();
 }
 
@@ -26,6 +25,7 @@ function fillGrid2() {
     grid2[currentPosition] = '+'
     if (existingCoins <= 1) {
 
+        //Should replace with random.js plugin
         min = Math.ceil(9);
         max = Math.floor(grid2.length - 1);
         dotPos = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -76,18 +76,17 @@ if( $('.container2').css('visibility') == 'visible') {
 function points() {
     t += 1
     basePoints = Math.round(t * 3.45)
-    $('.timer-points').html('Time: ' + t + '(s)' + ' Points: ' + basePoints + ' Coins: ' + coins + '<br> Laser interval: ' + atkSpeed + ' Max. Laser amount: ' + (laserAmount+1));
+    $('.timer-points').html('Time: ' + t + '(s)' + ' Points: ' + basePoints + ' Coins: ' + coins + '<br> Laser interval: ' + atkSpeed + ' Max. Laser amount: ' + laserAmount);
 }
 
 function lasers() {
-    if(atkSpeed >= 1600) {
+    if(atkSpeed >= 2100) {
     atkSpeed = Math.round(atkSpeed / 1.09)
     }
-}
-function increaseLasers(){
     if (laserAmount <= 6) {
         laserAmount += 1
     }
+
 }
 function attackWarning() {
     attackPositions.forEach(pos => {
@@ -106,14 +105,12 @@ function attackWarning() {
 function setAttackPositions() {
     console.log("warning")
 
-    laserPositions = [3, 8, 1, 0, 4, 7, 5, 6, 2];
+    laserPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     attackPositions = []
-    for (i = 0; i <= 9; i++) {
+    for (i = 0; i <= laserAmount; i++) {
         laserPos = laserPositions.splice(Math.floor(Math.random() * (i + 1)), 1)[0]
-        if(i <= laserAmount) {
         attackPositions.push(laserPos)
         console.log(laserPos)
-        }
     }
     atkWarningInterval = setInterval(attackWarning, atkSpeed / 6.4)
     setTimeout(shootLaser, ((atkSpeed / 10) * 5) + 80)
@@ -167,11 +164,11 @@ function endRound() {
     clearTimeout(testTimeout)
     clearInterval(pointsInterval)
     clearInterval(updateLasers)
-    clearInterval(updateLaserAmount)
     grid2.length = 0;
     grid2.push('Youve been hit by a laser. You lost.')
     $('.container2').html(grid2)
     totalPoints = basePoints + (coins * 10)
     $('.timer-points').html('Total points: ' + totalPoints + ' (' + basePoints + ' + ' + coins + ' * 10) Time survived: ' + t + ' seconds')
+    sendDatabaseUpdate(totalPoints, coins, "newMaxScore2", "")
 }
 

@@ -3,68 +3,90 @@
 
 <head>
     <link rel="stylesheet" href="styles.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.js"></script>
-<script>window.$ = window.jQuery = require(['./jquery-3.7.1.js']);
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.js"></script>
+    <script>window.$ = window.jQuery = require(['./jquery-3.7.1.js']);
+    </script>
 
-<script src="jquery-3.7.1.js"> </script>
-<script src="main.js"></script>
+    <script src="jquery-3.7.1.js"> </script>
+    <script src="main.js"></script>
     <script src="js.js"></script>
     <script src="js2.js"></script>
 
 </head>
 
 <body>
-<h1 class="title">Text minigame</h1>
+    <h1 class="title">Text minigame</h1>
 
-<div class="game1">
-    <div id="score" class="score">
-        <p id="scoreCounter" class="scoreCounter"> <b>Current Score: 0</b></p>
-    </div>
-    <div class="info"> 
-        <ul>
-            <li> +  ==  that's you!</li>
-            <li> @  ==  a bomb</li>
-            <li> *  ==  a coin</li>
-            <li> O  ==  path</li>
-        </ul>
-    </div>
-    <div class="description">
+    <div class="game1">
+        <div id="score" class="score">
+            <p id="scoreCounter" class="scoreCounter"> <b>Current Score: 0</b></p>
+        </div>
+        <div class="info">
+            <ul>
+                <li> + == that's you!</li>
+                <li> @ == a bomb</li>
+                <li> * == a coin</li>
+                <li> O == path</li>
+            </ul>
+        </div>
+        <div class="description">
             <p>Each time you collect a coin your score will raise and
                 the grid will get shorter. Avoid the bombs and
                 collect all the coins you can!
                 You can move using the arrows.
             </p>
+        </div>
+
+        <div id="container" class="container"> </div>
     </div>
 
-    <div id="container" class="container"> </div>
-</div>
+
+    <div class="game2">
 
 
-
-
-<div class="game2">
-
-
-    <div class="info info2"> 
-        <ul>
-            <li> +  ==  that's you!</li>
-            <li> *  ==  a coin</li>
-            <li> O  ==  path </li>
-            <li> V  ==  lasers</li>
-        </ul>
-    </div>
-    <div class="description description2">
-            <p>Try to survive as long as possible while "lasers" are shot at you. 
+        <div class="info info2">
+            <ul>
+                <li> + == that's you!</li>
+                <li> * == a coin</li>
+                <li> O == path </li>
+                <li> V == lasers</li>
+            </ul>
+        </div>
+        <div class="description description2">
+            <p>Try to survive as long as possible while "lasers" are shot at you.
                 The longer the time you survive the harder it will get. Additionally,
                 coins will spawn on the grid. Each coin obtained will award extra points.
+        </div>
+        <div translate="no" class="timer-points">
+            <p></p>
+        </div>
+        <div translate="no" id="container2" class="container2"> </div>
     </div>
-    <div translate="no" class="timer-points">
-        <p></p>
-    </div>
-    <div translate="no" id="container2" class="container2"> </div>
-</div>
 
+<!-- <div id="game3">
+    <div class="info"> 
+        <ul>
+            <li> +  ==  that's you! </li>
+            <li> Φ  ==  a coin </li>
+            <li> O  ==  path </li>
+            <li> ═  ==  barrier </li>
+            <li> X  ==  DEATH </li>
+            <li> ▼  ==  INCOMING DEATH </li>
+        </ul>
+    </div>
+    <div class="description">
+        <p> Run from the top of the path to the bottom as fast as you can without stepping out of the path,
+            jumping barriers (pressing space) and collecting coins. Each time you complete
+            one path, another will be randomly generated! Complete as many as you can before time runs out.
+</div>
+<div translate="no" class="timer-points">
+    <p></p>
+</div>
+    <div id="container3">
+
+
+    </div>
+<div> -->
 
     <div class="mainButtons">
         <input type="button" id="start" value="Start">
@@ -72,32 +94,32 @@
     </div>
     <div class="extra">
         <input type="button" id="scoreListButton" value="View and update your scores">
-        <div  class="save-warning">
-        <p> ^ Remeber to hit the update button after you get a new highscore or it wont't be saved! ^ </p>
-    </div>
+        <div class="save-warning">
+            <p> ^ Remeber to hit this button after you get a new highscore or it wont't be saved! ^ </p>
+        </div>
     </div>
     <div class="bestPlayer"></div>
 
     <div class="namePrompt" style="visibility: hidden; position: absolute">
         <h3 class="entername">Enter your name: (Max: 16 characters)</h3>
-        <input type="text" id="name" class="promptInputT" >
-        <input type="button" id="enterName"  class="promptInputB" value="Accept">
-        <input type="button" id="noNewUser"  class="promptInputB" value="I already have an user">
-        <h3 class="entername warning">
-            <br>  Dont skip user creation or your score wont be displayed on the scoreboard. 
-                                    <br> 
+        <input type="text" id="name" class="promptInputT">
+        <input type="button" id="enterName" class="promptInputB" value="Accept">
+        <input type="button" id="noNewUser" class="promptInputB" value="I already have an user">
+        <h3 class="entername warning">You cant change your user!
+            <br> Dont skip user creation or your score wont be displayed on the scoreboard.
+            <br> If you try to create another user, it wont work.
         </h3>
     </div>
 
     <div class="scoresContainer">
 
         <ul>
-     
+
         </ul>
 
-
     </div>
+
+
 </body>
 
 </html>
-
