@@ -15,16 +15,10 @@ function fillGrid3() {
         end = Random.integer( 0, 8 )
 
         for ( y = 0; y < 9; y++ ) {
-            if ( y != start ) {
-                if ( coinPosition != null && coinPosition == y ) {
-                    grid3.push( 'Φ' )
-                    coinPosition = null
-                }
-                else grid3.push( 'X' )
 
-            } else if ( Random.integer( barrierChance, 8 ) == barrierChance ) grid3.push( '═' )
-              else grid3.push( 'O' )
-
+            if ( y != start ) ( coinPosition != null && coinPosition == y ) ? (grid3.push( 'Φ' ), coinPosition = null) : grid3.push( 'X' )
+            else if ( Random.integer( barrierChance, 8 ) == barrierChance ) grid3.push( '═' )
+            else grid3.push( 'O' )
         }
 
         for ( i = 0; i < 9; i++ ) {
@@ -34,19 +28,12 @@ function fillGrid3() {
                 // removes coin if it is between 2 paths to avoid making a bridge
                 l = grid3.length
                 if ( grid3[ l - 10 ] == 'Φ' && grid3[ l - 19 ] == 'O' ) grid3[ l - 10 ] = 'X'
-
                 if ( j == 5 ) playerEnd = grid3.length - 1
-        
-            } else grid3.push( 'X' )
-            
-
+     
+            } else grid3.push( 'X' )          
             // determines the position of the coin
-            if ( i > start && i < end ) {
-                if ( Random.integer( coinChance, 4 ) == coinChance ) coinPosition = i
-                else coinPosition == null    
-            }
+            if ( i > start && i < end ) Random.integer( coinChance, 4 ) == coinChance ? coinPosition = i : coinPosition = null   
         }
-
         start = end
     }
 
@@ -120,16 +107,12 @@ $( document ).on( 'keydown', function ( k ) {
             position += 1
             break
         case ' ':
-            if ( grid3[ position + 9 ] == '═' ) {
-                position += 18
-            }
+            if ( grid3[ position + 9 ] == '═' ) position += 18
+            
             break
     }
 
-    if ( k.key != ' ' && grid3[ position ] == '═' ) {
-        position = pastPosition
-        console.log( 'hey' )
-    }
+    if ( k.key != ' ' && grid3[ position ] == '═' ) position = pastPosition
 
     if ( position == playerEnd ) {
         fillgrid3()
@@ -141,7 +124,8 @@ $( document ).on( 'keydown', function ( k ) {
         }, 2000 )
 
         row = 0
-    } else if ( !( position > grid3.length ) && !( position < grid3.length - grid3.length - 1 ) ) {
+    } 
+    else if ( !( position > grid3.length ) && !( position < grid3.length - grid3.length - 1 ) ) {
 
         switch ( grid3[ position ] ) {
 
@@ -164,7 +148,6 @@ $( document ).on( 'keydown', function ( k ) {
                 points += 20 + ( 20 * ( currentTime / 100 ) )
                 break
         }
-
         currentPosition = position
     }
 } )
