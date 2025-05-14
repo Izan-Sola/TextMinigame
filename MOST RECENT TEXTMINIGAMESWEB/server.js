@@ -74,7 +74,29 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
     password: "",
     database: "test"
   });
+//yes so i was too lazy to make passwords so i just used the public ip to identify each user, i will change it eventually...
 
+  //also will implement these functons to clean this of unnecesary copy paste:
+  /* updateScore(action[action.length-1])
+  
+  function updateScore(number) {
+      isNaN(test[test.length]) ? number = "" : ""   (i will prolly just add "1" to "updateScoreList" and "newMaxScore" and remove this check if im not lazy
+      const [rows] = await con.query(`SELECT pname, score{$number}, coins FROM players`); 
+      const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
+
+      return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
+  } 
+  
+  newMaxScore(action[action.length-1])
+  function newMaxScore(number) {
+      isNaN(test[test.length]) ? number = "" : "" 
+      const sql = `UPDATE players SET score{$number} = ?, coins = ? WHERE ip = ?`;
+      await con.query(sql, [score, coins, clientIP]);
+  }
+  
+  */
+
+  
   try {
     if (action === "updateScoreList") {
 
@@ -92,7 +114,13 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
     } 
     else if (action === "updateScoreList3") {
       
+      const [rows] = await con.query('SELECT pname, score3, coins FROM players'); 
+      const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
+
+      return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
     }
+
+      
       else if (action === "newPlayer") {
 
       const [existingPlayers] = await con.query('SELECT * FROM players WHERE ip = ?', [clientIP]); 
@@ -116,6 +144,11 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
 
       const sql = "UPDATE players SET score2 = ?, coins = ? WHERE ip = ?";
       await con.query(sql, [score, coins, clientIP]);
+        
+    } else if (action == "newMaxScore3") {
+        
+      const sql = "UPDATE players SET score3 = ?, coins = ? WHERE ip = ?";
+      await con.query(sql, [score, coins, clientIP]);
     }
   } catch (err) {
     console.error('Database operation error:', err);
@@ -124,6 +157,7 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
     await con.end();
   }
 }
+
 
 app.post('/databaseupdates', async (req, res) => {
   const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; // Use the correct method to get client IP
