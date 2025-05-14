@@ -25,12 +25,12 @@ function fillGrid() {
     grid[currentPosition] = '+'
     if (existingCoins <= 1) {
 
-        min = Math.ceil(9);
-        max = Math.floor(grid.length - 1);
-        dotPos = Math.floor(Math.random() * (max - min + 1)) + min;
-        if (dotPos != currentPosition) {
-            grid[dotPos] = '*'
-        }
+        // min = Math.ceil(9);
+        // max = Math.floor(grid.length - 1);
+        // dotPos = Math.floor(Math.random() * (max - min + 1)) + min;
+        dotPos = Random.integer(10, 60)
+
+        if (dotPos != currentPosition) grid[dotPos] = '*'
         else {
             dotpos += 2
             grid[dotPos] = '*'
@@ -45,7 +45,8 @@ function fillGrid() {
 //TODO: Should probably move the fetch function into a separate script.
 
 $(document).ready(function () {
-    start();
+    Random = new Random.Random();
+    start()
 
     $('input').on('mousedown', function (event) {
         event.stopPropagation();
@@ -86,11 +87,9 @@ function points() {
 }
 
 function lasers() {
-    atkSpeed = Math.round(atkSpeed / 1.08)
-    if (laserAmount <= 6) {
-        laserAmount += 1
-    }
-
+    if (laserAmount <= 6) laserAmount += 1
+    if (atkSpeed >= 2100) atkSpeed = Math.round(atkSpeed / 1.08)
+   
 }
 function attackWarning() {
     attackPositions.forEach(pos => {
@@ -111,11 +110,13 @@ function setAttackPositions() {
 
     laserPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     attackPositions = []
-    for (i = 0; i <= laserAmount; i++) {
-        laserPos = laserPositions.splice(Math.floor(Math.random() * (i + 1)), 1)[0]
+    for (i = 0; i < laserAmount; i++) {
+       // laserPos = laserPositions.splice(Math.floor(Math.random() * (i + 1)), 1)[0]
+        laserPos = laserPositions.splice(Random.integer(0, 8), 1)[0]
         attackPositions.push(laserPos)
         console.log(laserPos)
     }
+    console.log(attackPositions, "laseramount", laserAmount)
     atkWarningInterval = setInterval(attackWarning, atkSpeed / 6.4)
     setTimeout(shootLaser, ((atkSpeed / 10) * 5) + 80)
 }
