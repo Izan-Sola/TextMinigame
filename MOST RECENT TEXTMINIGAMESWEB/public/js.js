@@ -1,35 +1,38 @@
+import { sendDatabaseUpdate } from './main.js'
+export { fillGrid }
+export { coinSpawn }
+
+let restart, coinCount, position, currentPosition, score, moves, coins, grid;
+let min, max, dotPos, bombPos, maxLength;
+let element;
+let coinInterval, bombInterval;
 
 function fillGrid() {
-
-
+  coinInterval = setInterval(coinSpawn, 2000);
+  bombInterval = setInterval(bombSpawn, 4000);
   restart = false
   coinCount = 0
   position = 0
   currentPosition = 0
   score = 0
   moves = 5
-  swap = 0;
-grid = ['+', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
+  coins = 0
+  grid = ['+', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
         'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
         'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
         'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
         'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O',
         'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']; 
 
-        $('.container').html(grid);
+  $('.container').html(grid);
 }
-window.addEventListener("keydown", function(e) {
-  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
-      e.preventDefault();
-  }
-}, false);
+
+
 
 $(document).ready(function() {
-  coins = 0
-  sendDatabaseUpdate(score, coins, "updateScoreList");
- 
-  effectInterval = setInterval(effect, 750);
-swap = 0
+  
+  sendDatabaseUpdate(score, 0, "updateScoreList1");
+
     $('.namePrompt').css('visibility', 'visible'); 
   fillGrid();
 
@@ -81,6 +84,7 @@ if( $('.container').css('visibility') == 'visible') {
 })
 
 function coinSpawn() {
+
   if(coinCount <=1) {
 
   min = Math.ceil(2);
@@ -149,7 +153,7 @@ function move(direction) {
         clearInterval(coinInterval)
         grid.length = 0;
         grid.push('You touched a bomb! You lost.')
-        //sendDatabaseUpdate(score, coins, "updateScoreList", "")
+        sendDatabaseUpdate(score, coins, "newMaxScore1", "")
     }
 
     if (grid[position] == '*') {
@@ -170,16 +174,3 @@ function move(direction) {
 }
 
 
-function effect() {
-
-if(swap == 0) {
-	$('.bestPlayer').css('border', 'dotted');
-  swap = 1
-  
-}
-else if(swap == 1){
-	$('.bestPlayer').css('border', 'dashed');
-  swap = 0
-}
-
-}

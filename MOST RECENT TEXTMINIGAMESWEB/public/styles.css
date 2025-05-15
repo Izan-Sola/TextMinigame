@@ -52,6 +52,7 @@
 
 .mainButtons {
     position: relative;
+    
     margin-left: 300px;
 }
 .extra {
@@ -82,6 +83,7 @@ li{
     height: 98%;
     background-color: rgba(0, 0, 0, 0.75);
     user-select: none;
+    position: absolute;
 }
 .entername{
     position: absolute;
@@ -118,7 +120,7 @@ li{
     font-size: 22px;
 }
 
-.game2 {
+#game2 {
     visibility: hidden;
 }
 
@@ -144,16 +146,6 @@ li{
     border: black 3px dotted;
     text-align: center;
 }
-.timer-points {
-    position: absolute;
-    margin-left: 270px;
-    margin-top: -290px;
-    width: 400px;
-    height: 90px;
-    font-size: 22px;
-    text-align: center;
-}
-
 .description2 {
     margin-top: -265px;
 }
@@ -165,5 +157,51 @@ li{
     position: absolute;
     font-size: 14px;
     width: 200px;
+    text-align: center;
+}
+
+#game3 {
+    visibility: hidden;
+    position: absolute;
+    top: -0px;
+}
+
+.container3 {
+    position: absolute;
+    border: #000000 2px solid;
+    width: 200px;
+    height: 410px;
+    margin-left: 300px;
+    margin-top: 150px;
+    font-size: 30px;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.info3 {
+    position: absolute;
+    border: black 3px dotted;
+    width: 250px;
+    height: 200px;
+    margin-top: 140px;
+    margin-left: 520px;
+    font-size:20px;
+}
+
+.description3 {         
+    text-align: right;
+    position: absolute;
+    width: 180px;
+    margin-left: 110px;
+    margin-top: 130px;
+    font-size: 20px;
+}
+
+.timer-points3 {
+    margin-left: 225px;
+    top: 75px;
+    position: absolute;
+    font-size: 20px;
+    width: 400px;
     text-align: center;
 }

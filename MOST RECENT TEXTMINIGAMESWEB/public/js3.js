@@ -1,25 +1,61 @@
+import { Random } from 'https://cdn.skypack.dev/random-js';
+const random = new Random();
+import { sendDatabaseUpdate } from "./main.js";
+export { start3 }
+
+let container;
+let grid3;
+let start;
+let playerStart;
+let playerEnd;
+let currentPosition;
+let coinPosition;
+let currentTime;
+let t;
+let l;
+let totalPoints;
+let end;
+let coins;
+let points;
+let barrierChance;
+let coinChance;
+let coinPos;
+let incomingDeathDelay;
+let row;
+let timerInterval;
+let incomingDeathInterval;
+let position;
+let pastPosition;
+
+function endRound() {
+    clearInterval(timerInterval)
+ 
+
+    sendDatabaseUpdate(totalPoints, coins, "newMaxScore3", "")
+}
+
 function fillGrid3() {
     // posible rank names: {Short Legged}, {Average}, {Sprinter}, {Speed Runner}
-    container = $('#container3')
+    container = $('.container3')
     container.html('')
     grid3 = container.text().split('')
-    start = Random.integer(0, 8)
+    start = random.integer(0, 8)
     playerStart = start
     playerEnd = 0
     currentPosition = playerStart
     coinPosition = null
 
-    for (j = 0; j < 6; j++) {
-        end = Random.integer(0, 8)
+    for (let j = 0; j < 6; j++) {
+        end = random.integer(0, 8)
 
-        for (y = 0; y < 9; y++) {
+        for (let y = 0; y < 9; y++) {
             if (y != start) {
                 (coinPosition != null && coinPosition == y) ? (grid3.push('Φ'), coinPosition = null) : grid3.push('X')
-            } else if (Random.integer(barrierChance, 8) == barrierChance) grid3.push('═')
+            } else if (random.integer(barrierChance, 8) == barrierChance) grid3.push('═')
             else grid3.push('O')
         }
 
-        for (i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i++) {
             // draws path between the points
             if ((i >= start && i <= end) || (i <= start && i >= end)) {
                 grid3.push('O')
@@ -29,7 +65,7 @@ function fillGrid3() {
                 if (j == 5) playerEnd = grid3.length - 1
             } else grid3.push('X')
             // determines the position of the coin
-            if (i > start && i < end) Random.integer(coinChance, 4) == coinChance ? coinPosition = i : coinPosition = null
+            if (i > start && i < end) random.integer(coinChance, 4) == coinChance ? coinPosition = i : coinPosition = null
         }
 
         start = end
@@ -40,23 +76,43 @@ function fillGrid3() {
     console.log(playerEnd, grid3[playerEnd])
 }
 
-function start() {
-    fillgrid3()
+function start3() {
+    currentTime = 60
+    t = currentTime
+    coins = 0
+    points = 0
+    barrierChance = 1
+    coinChance = 1
+    coinPos = null
+    incomingDeathDelay = 1500
+    row = 0
+
+    $('.timer-points3').html(
+        'Time left: ' + currentTime + ' (s)' +
+        ' Points: ' + points +
+        ' Coins: ' + coins +
+        '<br> Barrier frequency: ' + barrierChance +
+        ' Paths completed: ' + 0
+    )
+    fillGrid3()
     timerInterval = setInterval(timer, 1000)
     incomingDeathInterval = setInterval(incomingDeath, incomingDeathDelay)
 }
 
-function end() {
-    clearInterval(timerInterval)
-    clearInterval(incomingDeathInterval)
-    alert("Time 0")
-    // sendDatabaseUpdate(totalPoints, coins, "newMaxScore3", "")
-}
 
 function incomingDeath() {
-    for (i = 9 * row; i < 9 * row + 9; i++) grid3[i] = 'V'
+    for (let i = 9 * row; i < 9 * row + 9; i++) {
+        if(grid3[i] == '+') {
+            container.html('You were too slow!')
+            endRound(); 
+            clearInterval(incomingDeathInterval)
+            break;
+        }
+        grid3[i] = 'V'
+        container.html(grid3)
+    }
     console.log(incomingDeathDelay)
-    container.html(grid3)
+
     row += 1
 }
 
@@ -67,7 +123,7 @@ function timer() {
     else if (currentTime % 16 == 0) coinChance += 1
     else if (currentTime % 4 == 0 && incomingDeathDelay > 1250) incomingDeathDelay -= 50
 
-    $('.timer-points').html(
+    $('.timer-points3').html(
         'Time left: ' + currentTime + ' (s)' +
         ' Points: ' + points +
         ' Coins: ' + coins +
@@ -76,7 +132,7 @@ function timer() {
         ' Incoming Death Delay: ' + incomingDeathDelay
     )
 
-    if (currentTime == 0) end()
+    if (currentTime == 0) endRound()
 }
 
 $(document).on('keydown', function(k) {
@@ -96,7 +152,7 @@ $(document).on('keydown', function(k) {
     if (k.key != ' ' && grid3[position] == '═') position = pastPosition
 
     if (position == playerEnd) {
-        fillgrid3()
+        fillGrid3()
         points += t + currentTime
         clearInterval(incomingDeathInterval)
         setTimeout(() => { setInterval(incomingDeath, incomingDeathDelay) }, 2000)
@@ -105,7 +161,7 @@ $(document).on('keydown', function(k) {
         switch (grid3[position]) {
             case 'X':
                 container.html('You stepped out of the path!')
-                end()
+                endRound()
                 break
             case 'O':
                 grid3[currentPosition] = 'O'
@@ -124,24 +180,7 @@ $(document).on('keydown', function(k) {
     }
 })
 
-$(document).ready(function() {
-    Random = new Random.Random()
-    currentTime = 60
-    t = currentTime
-    coins = 0
-    points = 0
-    barrierChance = 1
-    coinChance = 1
-    coinPos = null
-    incomingDeathDelay = 1500
-    row = 0
 
-    $('.timer-points').html(
-        'Time left: ' + currentTime + ' (s)' +
-        ' Points: ' + points +
-        ' Coins: ' + coins +
-        '<br> Barrier frequency: ' + barrierChance +
-        ' Paths completed: ' + 0
-    )
-    // fillGrid3()
-})
+
+
+

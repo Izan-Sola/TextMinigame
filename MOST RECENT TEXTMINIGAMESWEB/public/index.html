@@ -4,20 +4,25 @@
 <head>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/random-js@2.1.0/dist/random-js.umd.min.js"></script> -->
     <script>window.$ = window.jQuery = require(['./jquery-3.7.1.js']);
     </script>
-    <script src="randomjsplugin.js"></script>
+
     <script src="jquery-3.7.1.js"> </script>
-    <script src="main.js"></script>
-    <script src="js.js"></script>
-    <script src="js2.js"></script>
+  
+    <script type="module" src="main.js"></script>
+    <script type="module" src="js.js"></script>
+    <script type="module" src="js2.js"></script>
+    <script type="module" src="js3.js"></script>
 
 </head>
 
 <body>
     <h1 class="title">Text minigame</h1>
-
-    <div class="game1">
+<input type="button" id="showGame1" value="Mini Game 1">
+<input type="button" id="showGame2" value="Mini Game 2">
+<input type="button" id="showGame3" value="Mini Game 3">
+    <div id="game1">
         <div id="score" class="score">
             <p id="scoreCounter" class="scoreCounter"> <b>Current Score: 0</b></p>
         </div>
@@ -41,7 +46,7 @@
     </div>
 
 
-    <div class="game2">
+    <div id="game2">
 
 
         <div class="info info2">
@@ -63,34 +68,34 @@
         <div translate="no" id="container2" class="container2"> </div>
     </div>
 
-<!-- <div id="game3">
-    <div class="info"> 
-        <ul>
-            <li> +  ==  that's you! </li>
-            <li> Φ  ==  a coin </li>
-            <li> O  ==  path </li>
-            <li> ═  ==  barrier </li>
-            <li> X  ==  DEATH </li>
-            <li> ▼  ==  INCOMING DEATH </li>
-        </ul>
+
+    <div id="game3">
+        <div class="info3"> 
+            <ul>
+                <li> +  ==  that's you! </li>
+                <li> Φ  ==  a coin </li>
+                <li> O  ==  path </li>
+                <li> ═  ==  barrier </li>
+                <li> X  ==  DEATH </li>
+                <li> ▼  ==  INCOMING DEATH </li>
+            </ul>
+        </div>
+        <div class="description3">
+            <p> Run from the top of the path to the bottom as fast as you can without stepping out of the path,
+                jumping barriers (pressing space) and collecting coins. Each time you complete
+                one path, another will be randomly generated! Complete as many as you can before time runs out.
     </div>
-    <div class="description">
-        <p> Run from the top of the path to the bottom as fast as you can without stepping out of the path,
-            jumping barriers (pressing space) and collecting coins. Each time you complete
-            one path, another will be randomly generated! Complete as many as you can before time runs out.
-</div>
-<div translate="no" class="timer-points">
-    <p></p>
-</div>
-    <div id="container3">
-
-
+    <div translate="no" class="timer-points3">
+        <p></p>
     </div>
-<div> -->
+        <div class="container3">
 
+
+        </div>
+    </div> 
     <div class="mainButtons">
         <input type="button" id="start" value="Start">
-        <input type="button" id="switchGame" value="Switch Game">
+        <!-- <input type="button" id="switchGame" value="Switch Game"> -->
     </div>
     <div class="extra">
         <input type="button" id="scoreListButton" value="View and update your scores">

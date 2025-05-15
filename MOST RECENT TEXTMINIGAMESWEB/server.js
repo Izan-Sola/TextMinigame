@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express'); 
 const app = express();
 const port = 3000;
+const { Random } = require('random-js');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,7 +23,6 @@ const blockedIPs = ['88.228.67.42', '51.158.117.189'];
 app.use(async (req, res, next) => {
   const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const ip = clientIP.split(',')[0].trim();
-  console.log('Incoming IP:', ip);
 
   if (blockedIPs.includes(ip)) {
     console.log("Blocked IP:", ip); 
@@ -67,59 +67,35 @@ app.use(async (req, res, next) => {
   next();
 });
 
+
 async function dataBaseConnection(score, coins, action, name, clientIP) {
   const con = await mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "test"
+    database: "textminigame"
   });
 //yes so i was too lazy to make passwords so i just used the public ip to identify each user, i will change it eventually...
 
-  //also will implement these functons to clean this of unnecesary copy paste:
-  /* updateScore(action[action.length-1])
-  
-  function updateScore(number) {
-      isNaN(test[test.length]) ? number = "" : ""   (i will prolly just add "1" to "updateScoreList" and "newMaxScore" and remove this check if im not lazy
-      const [rows] = await con.query(`SELECT pname, score{$number}, coins FROM players`); 
-      const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
 
-      return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
-  } 
-  
-  newMaxScore(action[action.length-1])
-  function newMaxScore(number) {
-      isNaN(test[test.length]) ? number = "" : "" 
-      const sql = `UPDATE players SET score{$number} = ?, coins = ? WHERE ip = ?`;
-      await con.query(sql, [score, coins, clientIP]);
-  }
-  
-  */
 
-  
   try {
-    if (action === "updateScoreList") {
 
-        const [rows] = await con.query('SELECT pname, score FROM players'); 
+    const number = action[action.length-1]
+
+    if(action.includes("updateScoreList")) {
+        const [rows] = await con.query(`SELECT pname, score${number}, coins FROM players`); 
         const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
-        
+        console.log(rows)
         return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
-    } 
-    else if (action === "updateScoreList2") {
-
-      const [rows] = await con.query('SELECT pname, score2, coins FROM players'); 
-      const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
-
-      return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
-    } 
-    else if (action === "updateScoreList3") {
-      
-      const [rows] = await con.query('SELECT pname, score3, coins FROM players'); 
-      const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
-
-      return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
     }
-
+    else if (action.includes("newMaxScore")) {
+      
+        const sql = `UPDATE players SET score${number} = ?, coins = ? WHERE ip = ?`;
+         console.log("MAXSCORE", sql)
+        await con.query(sql, [score, coins, clientIP]);
+    }
+    
       
       else if (action === "newPlayer") {
 
@@ -133,22 +109,6 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
       await con.query(sql, [name, clientIP]);
       
       return { message: 'New player inserted successfully' };
-    } else if (action === "newMaxScore") {
-
-      const sql = "UPDATE players SET score = ? WHERE ip = ?";
-      await con.query(sql, [score, clientIP]);
-
-      return { message: 'Score updated successfully' };
-
-    } else if (action == "newMaxScore2") {
-
-      const sql = "UPDATE players SET score2 = ?, coins = ? WHERE ip = ?";
-      await con.query(sql, [score, coins, clientIP]);
-        
-    } else if (action == "newMaxScore3") {
-        
-      const sql = "UPDATE players SET score3 = ?, coins = ? WHERE ip = ?";
-      await con.query(sql, [score, coins, clientIP]);
     }
   } catch (err) {
     console.error('Database operation error:', err);
@@ -166,6 +126,6 @@ app.post('/databaseupdates', async (req, res) => {
   res.json(result);
 });
 
-app.listen(port, '172.30.135.220', () => {
+app.listen(port, '192.168.18.48', () => {
   console.log(`Server is running on http://yourIP:${port}`);
 });
