@@ -48,9 +48,12 @@ function fillGrid3() {
         end = random.integer(0, 8)
 
         for (let y = 0; y < 9; y++) {
+
             if (y != start) {
-                (coinPosition != null && coinPosition == y) ? (grid3.push('Φ'), coinPosition = null) : grid3.push('X')
-            } else if (random.integer(barrierChance, 8) == barrierChance) grid3.push('═')
+                
+               (coinPosition != null && coinPosition == y) ? (grid3.push('Φ'), coinPosition = null) : grid3.push('X')
+            } 
+            else if (random.integer(barrierChance, 8) == barrierChance) grid3.push('═')
             else grid3.push('O')
         }
 
@@ -151,12 +154,15 @@ $(document).on('keydown', function(k) {
     if (k.key != ' ' && grid3[position] == '═') position = pastPosition
 
     if (position == playerEnd) {
+        
         fillGrid3()
         points += t + currentTime
         clearInterval(incomingDeathInterval)
         setTimeout(() => { setInterval(incomingDeath, incomingDeathDelay) }, 2000)
         row = 0
+
     } else if (!(position > grid3.length) && !(position < 0)) {
+
         switch (grid3[position]) {
             case 'X':
                 container.html('You stepped out of the path!')
@@ -178,8 +184,3 @@ $(document).on('keydown', function(k) {
         currentPosition = position
     }
 })
-
-
-
-
-
