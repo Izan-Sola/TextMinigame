@@ -50,7 +50,7 @@ function fillGrid3() {
         for (let y = 0; y < 9; y++) {
 
             if (y != start) {
-                
+
                (coinPosition != null && coinPosition == y) ? (grid3.push('Φ'), coinPosition = null) : grid3.push('X')
             } 
             else if (random.integer(barrierChance, 8) == barrierChance) grid3.push('═')
@@ -138,49 +138,54 @@ function timer() {
 }
 
 $(document).on('keydown', function(k) {
-    position = currentPosition
-    pastPosition = position
 
-    if (coinPos != null) grid3[coinPos] = 'O'
 
-    switch (k.key) {
-        case 'ArrowUp': position -= 9; break       
-        case 'ArrowLeft': position -= 1; break
-        case 'ArrowDown': position += 9; break
-        case 'ArrowRight': position += 1; break
-        case ' ': if (grid3[position + 9] == '═') position += 18
-    }
+    if( $('.container3').css('visibility') == 'visible' ) {
+        position = currentPosition
+        pastPosition = position
 
-    if (k.key != ' ' && grid3[position] == '═') position = pastPosition
+        if (coinPos != null) grid3[coinPos] = 'O'
 
-    if (position == playerEnd) {
-        
-        fillGrid3()
-        points += t + currentTime
-        clearInterval(incomingDeathInterval)
-        setTimeout(() => { setInterval(incomingDeath, incomingDeathDelay) }, 2000)
-        row = 0
-
-    } else if (!(position > grid3.length) && !(position < 0)) {
-
-        switch (grid3[position]) {
-            case 'X':
-                container.html('You stepped out of the path!')
-                endRound()
-                break
-            case 'O':
-                grid3[currentPosition] = 'O'
-                grid3[position] = '+'
-                container.html(grid3)
-                break
-            case 'Φ':
-                coinPos = grid3.indexOf('Φ')
-                grid3[currentPosition] = 'O'
-                grid3[position] = '+'
-                container.html(grid3)
-                points += 20 + (20 * (currentTime / 100))
-                break
+        switch (k.key) {
+            case 'ArrowUp': position -= 9; break       
+            case 'ArrowLeft': position -= 1; break
+            case 'ArrowDown': position += 9; break
+            case 'ArrowRight': position += 1; break
+            case ' ': if (grid3[position + 9] == '═') position += 18
         }
-        currentPosition = position
+
+        if (k.key != ' ' && grid3[position] == '═') position = pastPosition
+
+        if (position == playerEnd) {
+            
+            fillGrid3()
+            points += t + currentTime
+            clearInterval(incomingDeathInterval)
+            setTimeout(() => { setInterval(incomingDeath, incomingDeathDelay) }, 2000)
+            row = 0
+
+        } else if (!(position > grid3.length) && !(position < 0)) {
+
+            switch (grid3[position]) {
+                case 'X':
+                    container.html('You stepped out of the path!')
+                    endRound()
+                    break
+                case 'O':
+                    grid3[currentPosition] = 'O'
+                    grid3[position] = '+'
+                    container.html(grid3)
+                    break
+                case 'Φ':
+                    coinPos = grid3.indexOf('Φ')
+                    grid3[currentPosition] = 'O'
+                    grid3[position] = '+'
+                    container.html(grid3)
+                    points += 20 + (20 * (currentTime / 100))
+                    break
+            }
+            currentPosition = position
+        }
     }
 })
+
