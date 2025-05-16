@@ -206,15 +206,11 @@ $(document).ready(function () {
                         break
               }
                        
-
         })
 });
 
-
-
 function effect() {
-const borderType = $('.bestPlayer').css('border').split(' ')[1]
-if(borderType == 'dashed') $('.bestPlayer').css('border', 'dotted');
-else $('.bestPlayer').css('border', 'dashed');
-
+           const borderType = $('.bestPlayer').css('border').split(' ')[1]
+           if(borderType == 'dashed') $('.bestPlayer').css('border', 'dotted');
+           else $('.bestPlayer').css('border', 'dashed');
 }
