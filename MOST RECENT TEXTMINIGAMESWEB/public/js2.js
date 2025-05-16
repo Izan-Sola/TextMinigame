@@ -1,10 +1,10 @@
-  import { Random } from 'https://cdn.skypack.dev/random-js';
-   const random = new Random();
-  import { sendDatabaseUpdate } from './main.js';
+import { Random } from 'https://cdn.skypack.dev/random-js';
+const random = new Random();
+import { sendDatabaseUpdate } from './main.js';
  
 
 export { start }
-// Declare global variables
+
 let hit;
 let newPos;
 let timertest;
@@ -51,14 +51,16 @@ function fillGrid2() {
     for (let i = 0; i <= 62; i++) {
         grid.push('O');
     }
-    grid[currentPosition] = '+';
+    grid[currentPosition] = '+'
+
     if (existingCoins <= 1) {
+
         dotPos = random.integer(10, 60);
-        if (dotPos !== currentPosition) {
-            grid[dotPos] = '*';
-        } else {
-            dotPos += 2;
-            grid[dotPos] = '*';
+
+        if (dotPos !== currentPosition) grid[dotPos] = '*'
+        else {
+            dotPos += 2
+            grid[dotPos] = '*'
         }
     }
     $('.container2').html(grid);
@@ -127,11 +129,11 @@ function test() {
 }
 
 function move(newPos) {
-    if (grid[newPos] === '*') {
+    if (grid[newPos] == '*') {
         grid[newPos] = 'O';
         coins += 1;
     }
-    if (grid[newPos] === 'V') {
+    if (grid[newPos] == 'V') {
         hit = true;
         endRound();
     } else {
@@ -158,34 +160,18 @@ function endRound() {
     sendDatabaseUpdate(totalPoints, coins, "newMaxScore2", "");
 }
 
-// Initialization
 $(document).ready(function () {
-    console.log(random.integer(1, 10))
-
-    // $('input').on('mousedown', function (event) {
-    //     event.stopPropagation();
-    //     if (this.id === 'start') {
-    //         start();
-    //         shootLaserInterval = setTimeout(setAttackPositions, atkSpeed);
-    //         pointsInterval = setInterval(points, 1000);
-    //         updateLasers = setInterval(lasers, 6500);
-    //     }
-    // });
 
     $(document).on('keydown', function (k) {
-        k.stopPropagation();
 
-        if (k.key === 'ArrowLeft' && currentPosition !== 9) {
-            move(currentPosition - 1);
-        }
-        if (k.key === 'ArrowRight' && currentPosition !== 71) {
-            move(currentPosition + 1);
-        }
-        if (k.key === 'ArrowUp' && currentPosition > 17) {
-            move(currentPosition - 9);
-        }
-        if (k.key === 'ArrowDown' && currentPosition < 63) {
-            move(currentPosition + 9);
+        k.stopPropagation();
+        if( $('.container2').css('visibility') == 'visible' ) {
+            
+
+            if (k.key == 'ArrowLeft' && currentPosition !== 9) move(currentPosition - 1);
+            else if (k.key == 'ArrowRight' && currentPosition !== 71) move(currentPosition + 1);
+            else if (k.key == 'ArrowUp' && currentPosition > 17) move(currentPosition - 9);
+            else if (k.key == 'ArrowDown' && currentPosition < 63) move(currentPosition + 9);
         }
     });
 });
