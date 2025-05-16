@@ -77,8 +77,6 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
   });
 //yes so i was too lazy to make passwords so i just used the public ip to identify each user, i will change it eventually...
 
-
-
   try {
 
     const number = action[action.length-1]
@@ -120,7 +118,7 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
 
 
 app.post('/databaseupdates', async (req, res) => {
-  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; // Use the correct method to get client IP
+  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; 
   const {score, coins, action, name} = req.body;
   const result = await dataBaseConnection(score, coins, action, name, clientIP);
   res.json(result);
