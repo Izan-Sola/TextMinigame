@@ -35,7 +35,6 @@ function endRound() {
 }
 
 function fillGrid3() {
-    // posible rank names: {Short Legged}, {Average}, {Sprinter}, {Speed Runner}
     container = $('.container3')
     container.html('')
     grid3 = container.text().split('')
