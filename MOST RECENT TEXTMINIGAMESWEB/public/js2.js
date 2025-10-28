@@ -165,6 +165,9 @@ $(document).ready(function () {
     $(document).on('keydown', function (k) {
 
         k.stopPropagation();
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k.key)) {
+    k.preventDefault();
+}
         if( $('.container2').css('visibility') == 'visible' ) {
             
 

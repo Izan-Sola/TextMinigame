@@ -21,15 +21,26 @@ let barrierChance;
 let coinChance;
 let coinPos;
 let incomingDeathDelay;
+let previousIncomingDeathDelay; 
 let row;
 let timerInterval;
 let incomingDeathInterval;
 let position;
 let pastPosition;
+let startTime; 
 
 function endRound() {
     clearInterval(timerInterval)
- 
+    clearInterval(incomingDeathInterval)
+
+
+    const endTime = Date.now();
+
+    const timeLastedSeconds = Math.floor((endTime - startTime) / 1000); 
+    
+    totalPoints = points + (timeLastedSeconds * 1.10);
+
+    console.log(`Game Over! Time Lasted: ${timeLastedSeconds}s. Base Points: ${points}. Total Score: ${totalPoints}`);
 
     sendDatabaseUpdate(totalPoints, coins, "newMaxScore3", "")
 }
@@ -58,15 +69,15 @@ function fillGrid3() {
         }
 
         for (let i = 0; i < 9; i++) {
-            // draws path between the points
+            
             if ((i >= start && i <= end) || (i <= start && i >= end)) {
                 grid3.push('O')
-                // removes coin if it is between 2 paths to avoid making a bridge
+                
                 l = grid3.length
                 if (grid3[l - 10] == 'Φ' && grid3[l - 19] == 'O') grid3[l - 10] = 'X'
                 if (j == 5) playerEnd = grid3.length - 1
             } else grid3.push('X')
-            // determines the position of the coin
+            
             if (i > start && i < end) random.integer(coinChance, 4) == coinChance ? coinPosition = i : coinPosition = null
         }
 
@@ -87,14 +98,17 @@ function start3() {
     coinChance = 1
     coinPos = null
     incomingDeathDelay = 1500
+    previousIncomingDeathDelay = 1500; 
     row = 0
+    startTime = Date.now(); 
 
     $('.timer-points3').html(
         'Time left: ' + currentTime + ' (s)' +
         ' Points: ' + points +
         ' Coins: ' + coins +
         '<br> Barrier frequency: ' + barrierChance +
-        ' Paths completed: ' + 0
+        ' Paths completed: ' + 0 +
+        ' Incoming Death Delay: ' + incomingDeathDelay
     )
     fillGrid3()
     timerInterval = setInterval(timer, 1000)
@@ -107,7 +121,6 @@ function incomingDeath() {
         if(grid3[i] == '+') {
             container.html('You were too slow!')
             endRound(); 
-            clearInterval(incomingDeathInterval)
             break;
         }
         grid3[i] = 'V'
@@ -123,7 +136,14 @@ function timer() {
 
     if (currentTime % 8 == 0) barrierChance += 1
     else if (currentTime % 16 == 0) coinChance += 1
-    else if (currentTime % 4 == 0 && incomingDeathDelay > 1250) incomingDeathDelay -= 50
+    else if (currentTime % 4 == 0 && incomingDeathDelay > 799) incomingDeathDelay -= 150
+
+    // Check if the delay has been changed and needs updating
+    if (incomingDeathDelay !== previousIncomingDeathDelay) {
+        clearInterval(incomingDeathInterval);
+        incomingDeathInterval = setInterval(incomingDeath, incomingDeathDelay);
+        previousIncomingDeathDelay = incomingDeathDelay;
+    }
 
     $('.timer-points3').html(
         'Time left: ' + currentTime + ' (s)' +
@@ -139,7 +159,9 @@ function timer() {
 
 $(document).on('keydown', function(k) {
 
-
+if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k.key)) {
+    k.preventDefault();
+}
     if( $('.container3').css('visibility') == 'visible' ) {
         position = currentPosition
         pastPosition = position
@@ -159,9 +181,12 @@ $(document).on('keydown', function(k) {
         if (position == playerEnd) {
             
             fillGrid3()
-            points += t + currentTime
+            
+            points += 15 + (currentTime * 1.10); 
+            
+            // Clear and reset interval here too, using the currently set delay
             clearInterval(incomingDeathInterval)
-            setTimeout(() => { setInterval(incomingDeath, incomingDeathDelay) }, 2000)
+            incomingDeathInterval = setInterval(incomingDeath, incomingDeathDelay)
             row = 0
 
         } else if (!(position > grid3.length) && !(position < 0)) {
@@ -181,11 +206,12 @@ $(document).on('keydown', function(k) {
                     grid3[currentPosition] = 'O'
                     grid3[position] = '+'
                     container.html(grid3)
-                    points += 20 + (20 * (currentTime / 100))
+                    
+                    points += 2; 
+                    coins += 1;
                     break
             }
             currentPosition = position
         }
     }
 })
-

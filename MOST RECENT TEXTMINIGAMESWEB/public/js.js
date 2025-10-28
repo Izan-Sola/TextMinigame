@@ -36,7 +36,9 @@ $(document).ready(function() {
 
   $(document).on('keydown', function(k) {
   k.stopPropagation();
-
+if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k.key)) {
+    k.preventDefault();
+}
     if( $('.container').css('visibility') == 'visible') {
 
         if (k.key == 'ArrowLeft' && position != 0) move(position-=1)

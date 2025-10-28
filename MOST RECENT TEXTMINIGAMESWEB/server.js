@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const express = require('express'); 
 const app = express();
-const port = 3000;
+const port = 3002;
 const { Random } = require('random-js');
 
 app.use(cors());
@@ -87,14 +87,25 @@ async function dataBaseConnection(score, coins, action, name, clientIP) {
         console.log(rows)
         return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
     }
-    else if (action.includes("newMaxScore")) {
-      
-        const sql = `UPDATE players SET score${number} = ?, coins = ? WHERE ip = ?`;
-         console.log("MAXSCORE", sql)
+  // Inside dataBaseConnection on the server...
+else if (action.includes("newMaxScore")) {
+    const number = action[action.length-1];
+    const scoreCol = `score${number}`;
+
+    // 1. Select the current score
+    const [currentScoreRows] = await con.query(`SELECT ${scoreCol} FROM players WHERE ip = ?`, [clientIP]);
+    const currentMaxScore = currentScoreRows[0] ? currentScoreRows[0][scoreCol] : 0;
+
+    // 2. Only update if the new score is higher
+    if (score > currentMaxScore) {
+        const sql = `UPDATE players SET ${scoreCol} = ?, coins = ? WHERE ip = ?`;
         await con.query(sql, [score, coins, clientIP]);
+        return { message: 'New high score recorded!' };
+    } else {
+        return { message: 'Score was lower than or equal to current high score.' };
     }
+}
     
-      
       else if (action === "newPlayer") {
 
       const [existingPlayers] = await con.query('SELECT * FROM players WHERE ip = ?', [clientIP]); 
@@ -124,6 +135,6 @@ app.post('/databaseupdates', async (req, res) => {
   res.json(result);
 });
 
-app.listen(port, '192.168.18.48', () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on http://yourIP:${port}`);
 });

@@ -15,8 +15,17 @@ let maxScoreGlobal = 0;
 let bestPlayerName = '';
 let maxScore = 0;
 
+
+function resetGlobalScore() {
+    globalScores = [];
+    maxScoreGlobal = 0;
+    bestPlayerName = '';
+    $('.bestPlayer').html('');
+}
+
+
 function sendDatabaseUpdate(score, coins, action, name) {
-    fetch('https://monthly-devoted-pug.ngrok-free.app/databaseupdates', {
+    fetch('http://textminigames.duckdns.org/databaseupdates', {
         method: 'POST',
         headers: {
             accept: 'application/json',
@@ -32,10 +41,12 @@ function sendDatabaseUpdate(score, coins, action, name) {
     .then(response => response.json())
     .then(data => {
         $('.scoresContainer').html('');
-        if (action === "updateScoreList1") {
-          
-         
+        
+        if (action.includes("updateScoreList")) {
+            resetGlobalScore();
+        }
 
+        if (action === "updateScoreList1") {
             data.scores.forEach(rows => {
                 let userRank = '';
                 switch (true) {
@@ -67,15 +78,14 @@ function sendDatabaseUpdate(score, coins, action, name) {
         else if (action === "updateScoreList2") {
             $('.scoresContainer').html('');
             
-
             data.scores.forEach(rows => {
                 let userRank = '';
-                switch (true) {
-                    case (rows.score2 <= 150 && rows.score2 > 0): userRank = ranks[5]; break;
-                    case (rows.score2 <= 300): userRank = ranks[6]; break;
-                    case (rows.score2 <= 450): userRank = ranks[7]; break;
-                    case (rows.score2 <= 650 || rows.score2 > 650): userRank = ranks[8]; break;
-                    default: userRank = ranks[4]; break;
+                  switch (true) {
+                    case (rows.score2 >= 600): userRank = ranks[8]; break; 
+                    case (rows.score2 >= 400): userRank = ranks[7]; break; 
+                    case (rows.score2 >= 250): userRank = ranks[6]; break; 
+                    case (rows.score2 >= 100): userRank = ranks[5]; break; 
+                    default: userRank = ranks[4]; break; 
                 }
 
 
@@ -101,11 +111,12 @@ function sendDatabaseUpdate(score, coins, action, name) {
             data.scores.forEach(rows => {
                 let userRank = '';
                 switch (true) {
-                    case (rows.score3 <= 150 && rows.score3 > 0): userRank = ranks[9]; break;
-                    case (rows.score3 <= 300): userRank = ranks[10]; break;
-                    case (rows.score3 <= 450): userRank = ranks[11]; break;
-                    case (rows.score3 > 450): userRank = ranks[12]; break;
-                    default: userRank = ranks[9]; break;
+              
+                    case (rows.score3 > 600): userRank = ranks[12]; break;
+                    case (rows.score3 >= 400): userRank = ranks[11]; break; 
+                    case (rows.score3 >= 250): userRank = ranks[10]; break;
+                    case (rows.score3 >= 100 && rows.score3 > 0): userRank = ranks[9]; break; 
+                    default: userRank = ranks[9]; 
                 }
               $('.scoresContainer').append(`<li>${userRank} Player: ${rows.pname} - Score: ${rows.score3} Coins: ${rows.coins}</li>`);
                  newMaxScoreGlobal(rows.pname, rows.score3, rows.coins)
@@ -134,11 +145,11 @@ function sendDatabaseUpdate(score, coins, action, name) {
 }
 
 function newMaxScoreGlobal(pname, score, coins) {
-  globalScores.push(score);
-  maxScoreGlobal = Math.max(...globalScores);
 
     if (score >= maxScoreGlobal) {
+        maxScoreGlobal = score;
         bestPlayerName = pname;
+
         $('.bestPlayer').html(`<p>Best Player: ${bestPlayerName} with ${maxScoreGlobal} points and ${coins} coins</p>`);
     }
 
@@ -183,7 +194,7 @@ $(document).ready(function () {
                       $('#game2').css('visibility', 'hidden')
                       $('#game3').css('visibility', 'visible')
                       $('#game1').css('visibility', 'hidden')
-                      $('.mainButtons').css('margin-top', '190px'); 
+                      $('.mainButtons').css('margin-top', '100px'); 
                       $('.scoresContainer').css('margin-top', '-600px'); break
                       
 
@@ -200,6 +211,7 @@ $(document).ready(function () {
                       }
                       break
                case 'scoreListButton':
+                 
                        if($('#game1').css('visibility') == 'visible')  sendDatabaseUpdate(score, coins, "updateScoreList1", "")
                        if($('#game2').css('visibility') == 'visible')  sendDatabaseUpdate(score, coins, "updateScoreList2", "")
                        if($('#game3').css('visibility') == 'visible')  sendDatabaseUpdate(score, coins, "updateScoreList3", "")
