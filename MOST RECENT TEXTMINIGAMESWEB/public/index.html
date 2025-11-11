@@ -105,16 +105,21 @@
     </div>
     <div class="bestPlayer"></div>
 
-    <div class="namePrompt" style="visibility: hidden; position: absolute">
-        <h3 class="entername">Enter your name: (Max: 16 characters)</h3>
-        <input type="text" id="name" class="promptInputT">
-        <input type="button" id="enterName" class="promptInputB" value="Accept">
-        <input type="button" id="noNewUser" class="promptInputB" value="I already have an user">
-        <h3 class="entername warning">You cant change your user!
-            <br> Dont skip user creation or your score wont be displayed on the scoreboard.
-            <br> If you try to create another user, it wont work.
-        </h3>
+<div class="namePrompt">
+  <div class="promptContent">
+    <h2>Enter your name</h2>
+    <input type="text" id="name" class="promptInput" placeholder="Name">
+
+    <h2>Enter your password</h2>
+    <input type="password" id="password" class="promptInput" placeholder="Password">
+
+    <div class="buttonRow">
+      <input type="button" id="enterName" class="promptInputB" value="Create Account">
+      <input type="button" id="login" class="promptInputB" value="Login">
     </div>
+  </div>
+</div>
+
 
     <div class="scoresContainer">
 

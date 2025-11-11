@@ -67,58 +67,52 @@ app.use(async (req, res, next) => {
   next();
 });
 
-
-async function dataBaseConnection(score, coins, action, name, clientIP) {
+async function dataBaseConnection(score, coins, action, name, password) {
   const con = await mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "1234567890",
     database: "textminigame"
   });
-//yes so i was too lazy to make passwords so i just used the public ip to identify each user, i will change it eventually...
 
   try {
+    const number = action[action.length - 1];
 
-    const number = action[action.length-1]
-
-    if(action.includes("updateScoreList")) {
-        const [rows] = await con.query(`SELECT pname, score${number}, coins FROM players`); 
-        const [ipRows] = await con.query('SELECT pname FROM players WHERE ip = ?', [clientIP]);
-        console.log(rows)
-        return { scores: rows, playerName: ipRows.length > 0 ? ipRows[0].pname : null };
+    if (action.includes("updateScoreList")) {
+      const [rows] = await con.query(`SELECT pname, score${number}, coins FROM players`);
+      const [pwRows] = await con.query('SELECT pname FROM players WHERE password = ?', [password]);
+      return { scores: rows, playerName: pwRows.length > 0 ? pwRows[0].pname : null };
     }
-  // Inside dataBaseConnection on the server...
-else if (action.includes("newMaxScore")) {
-    const number = action[action.length-1];
-    const scoreCol = `score${number}`;
 
-    // 1. Select the current score
-    const [currentScoreRows] = await con.query(`SELECT ${scoreCol} FROM players WHERE ip = ?`, [clientIP]);
-    const currentMaxScore = currentScoreRows[0] ? currentScoreRows[0][scoreCol] : 0;
+    else if (action.includes("newMaxScore")) {
+      const number = action[action.length - 1];
+      const scoreCol = `score${number}`;
+      const [playerRows] = await con.query('SELECT * FROM players WHERE pname = ? AND password = ?', [name, password]);
+      if (playerRows.length === 0) return { error: 'Invalid name or password.' };
 
-    // 2. Only update if the new score is higher
-    if (score > currentMaxScore) {
-        const sql = `UPDATE players SET ${scoreCol} = ?, coins = ? WHERE ip = ?`;
-        await con.query(sql, [score, coins, clientIP]);
+      const currentMaxScore = playerRows[0][scoreCol] || 0;
+      if (score > currentMaxScore) {
+        const sql = `UPDATE players SET ${scoreCol} = ?, coins = ? WHERE pname = ?`;
+        await con.query(sql, [score, coins, name]);
         return { message: 'New high score recorded!' };
-    } else {
+      } else {
         return { message: 'Score was lower than or equal to current high score.' };
-    }
-}
-    
-      else if (action === "newPlayer") {
-
-      const [existingPlayers] = await con.query('SELECT * FROM players WHERE ip = ?', [clientIP]); 
-      if (existingPlayers.length > 0) {
-       return { error: 'A user with this IP address already exists.' };
-        
       }
-
-      const sql = "INSERT INTO players SET pname = ?, ip = ?";
-      await con.query(sql, [name, clientIP]);
-      
-      return { message: 'New player inserted successfully' };
     }
+
+    else if (action === "newPlayer") {
+      const [nameExists] = await con.query('SELECT * FROM players WHERE pname = ?', [name]);
+      if (nameExists.length > 0) return { error: 'This name is already taken.' };
+      await con.query("INSERT INTO players (pname, password) VALUES (?, ?)", [name, password]);
+      return { message: 'New player created successfully.' };
+    }
+
+    else if (action === "login") {
+      const [player] = await con.query('SELECT * FROM players WHERE pname = ? AND password = ?', [name, password]);
+      if (player.length === 0) return { error: 'Wrong name or password.' };
+      return { message: 'Login successful.' };
+    }
+
   } catch (err) {
     console.error('Database operation error:', err);
     return { error: err.message };
@@ -129,9 +123,8 @@ else if (action.includes("newMaxScore")) {
 
 
 app.post('/databaseupdates', async (req, res) => {
-  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; 
-  const {score, coins, action, name} = req.body;
-  const result = await dataBaseConnection(score, coins, action, name, clientIP);
+  const { score, coins, action, name, password } = req.body;
+  const result = await dataBaseConnection(score, coins, action, name, password);
   res.json(result);
 });
 

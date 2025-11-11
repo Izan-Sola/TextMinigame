@@ -32,7 +32,7 @@ $(document).ready(function() {
   sendDatabaseUpdate(score, 0, "updateScoreList1");
 
     $('.namePrompt').css('visibility', 'visible'); 
-  fillGrid();
+  //fillGrid();
 
   $(document).on('keydown', function(k) {
   k.stopPropagation();

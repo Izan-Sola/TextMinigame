@@ -4,6 +4,7 @@ import { start3 } from './js3.js';
 export { sendDatabaseUpdate };
 
 let playerName = '';
+let password = '';
 let score = 0;
 let coins = 0;
 let ranks = ['(Newbie)', '(Advanced)', '(Expert)', '(GODLIKE)',
@@ -24,7 +25,7 @@ function resetGlobalScore() {
 }
 
 
-function sendDatabaseUpdate(score, coins, action, name) {
+function sendDatabaseUpdate(score, coins, action, name, password) {
     fetch('http://textminigames.duckdns.org/databaseupdates', {
         method: 'POST',
         headers: {
@@ -35,13 +36,26 @@ function sendDatabaseUpdate(score, coins, action, name) {
             score,
             coins,
             action,
-            name
+            name,
+            password
         })
     })
     .then(response => response.json())
     .then(data => {
         $('.scoresContainer').html('');
-        
+        if (action === "newPlayer" || action === "login") {
+            if (data.error) {
+                alert(data.error);
+                location.reload();
+                return;
+            } else if (data.message) {
+                alert(data.message);
+                $('.namePrompt').css('visibility', 'hidden');
+                return;
+            }
+        }
+
+
         if (action.includes("updateScoreList")) {
             resetGlobalScore();
         }
@@ -165,14 +179,18 @@ $(document).ready(function () {
         
           switch (this.id) {
 
-                case 'enterName':
-                      playerName = $('#name').val();
-                      sendDatabaseUpdate(0, 0, "newPlayer", playerName);
-                      $('.namePrompt').css('visibility', 'hidden'); break
+            case 'enterName':
+                playerName = $('#name').val();
+                password = $('#password').val();
+                sendDatabaseUpdate(0, 0, "newPlayer", playerName, password);
+                break;
 
-                case 'noNewUser':
-                      $('.namePrompt').css('visibility', 'hidden'); break
-                
+            case 'login':
+                playerName = $('#name').val();
+                password = $('#password').val();
+                sendDatabaseUpdate(0, 0, "login", playerName, password);
+                break;
+            
                 case 'showGame1':
                       sendDatabaseUpdate(0, 0, "updateScoreList1", "")
                       $('#game2').css('visibility', 'hidden')
